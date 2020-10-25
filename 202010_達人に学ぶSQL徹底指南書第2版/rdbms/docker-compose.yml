@@ -1,0 +1,29 @@
+version: '3.5'
+
+services:
+  pg:
+    tty: true
+    container_name: postgres
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      PGDATA: /data/postgres
+      POSTGRES_DB: sandbox
+      POSTGRES_INITDB_ARGS: "--encoding=UTF-8"
+    volumes:
+       - ./postgres:/data/postgres
+    ports:
+      - "25432:5432"
+    restart: unless-stopped
+    networks:
+      local:
+networks:
+  local:
+    driver: bridge
+    ipam:
+      driver: default
+      config: 
+        - subnet: 173.33.0.0/24
