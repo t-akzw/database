@@ -1,10 +1,10 @@
-FROM postgres:latest
-ENV DEBIAN_FRONTEND=noninteractive
-RUN apt-get update && \
-    apt-get install -y build-essential cmake clang libssl-dev vim openssh-server iputils-ping net-tools
+FROM postgres:10.1
 
-RUN mkdir /src
+# ロケール設定
+RUN localedef -i ja_JP -c -f UTF-8 -A /usr/share/locale/locale.alias ja_JP.UTF-8
+ENV LANG ja_JP.utf8
 
-WORKDIR /src
+# 作成した設定ファイルを/etc/postgresql以下にコピー
+COPY ./conf/my-postgresql-10.1.conf /etc/postgresql/postgresql.conf
 
-EXPOSE 5432
+CMD ["-c", "config_file=/etc/postgresql/postgresql.conf"]
