@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  jupyterlab:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    user: root
+    environment:
+      NB_UID: 1000
+      NB_GID: 100
+      GRANT_SUDO: "yes"
+    volumes:
+       - "./work:/home/jovyan/work"
+    privileged: true
+    ports:
+      - "28888:8888"
+    restart: unless-stopped
+    command: start.sh jupyter lab --NotebookApp.token=''
+    networks:
+      - default
+      - shared-network
+networks:
+  shared-network:
+    external: true
